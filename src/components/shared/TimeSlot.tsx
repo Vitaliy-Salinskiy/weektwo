@@ -8,24 +8,46 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
+import { useSocketStore } from "@/store/socketStore";
 
 interface TimeSlotProps {
   time: string;
+  day: string;
 }
 
-export const TimeSlot = ({ time }: TimeSlotProps) => {
+export const TimeSlot = ({ time, day }: TimeSlotProps) => {
+  const { socket } = useSocketStore();
+
   const [isBooked, setIsBooked] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   const [event, setEvent] = useState("");
 
   const { toast } = useToast();
 
+  useEffect(() => {
+    socket?.on("booking confirmed", (bookedDay: string, bookedTime: string) => {
+      if (day === bookedDay && time === bookedTime) {
+        setIsBooked(true);
+      }
+    });
+
+    socket?.on("booking cancelled", (bookedDay: string, bookedTime: string) => {
+      if (day === bookedDay && time === bookedTime) {
+        setIsBooked(false);
+      }
+    });
+  }, [socket, day, time]);
+
   const handleBooking = (isOpen: boolean) => {
+    if (isOpen) {
+      socket?.emit("booking", day, time);
+    }
     if (!isOpen) {
       setIsBooking(false);
+      socket?.emit("cancel booking", day, time);
     }
     if (isBooked) {
       setIsBooking(false);
@@ -74,7 +96,10 @@ export const TimeSlot = ({ time }: TimeSlotProps) => {
                   action: (
                     <ToastAction
                       altText="Dismiss"
-                      onClick={() => setIsBooking(false)}
+                      onClick={() => {
+                        socket?.emit("cancel booking", day, time);
+                        setIsBooking(false);
+                      }}
                     >
                       Dismiss
                     </ToastAction>

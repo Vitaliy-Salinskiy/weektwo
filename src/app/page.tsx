@@ -1,14 +1,20 @@
 "use client";
 
 import { TimeSlot } from "@/components/shared/TimeSlot";
+import { setupSocket } from "@/store/socketStore";
 import { getDays } from "@/utils";
 // import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
   const calendarData = getDays();
   const hours = calendarData[0].times;
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  // const [date, setDate] = useState<Date | undefined>(new Date());
+
+  useEffect(() => {
+    const cleanup = setupSocket();
+    return cleanup;
+  }, []);
 
   return (
     <main className="flex">
@@ -34,14 +40,14 @@ export default function Home() {
         {calendarData.map((day, index) => {
           let [dayOfWeek, date] = day.date.split(" ");
           return (
-            <div key={day.date + index} className={`border border-t-0`}>
+            <div key={day.date + index} className={`border-x`}>
               <div className="flex flex-col items-center justify-center text-center text-gray-500 py-5">
                 <p className="text-sm">{date}</p>
                 <h2 className="text-2xl">{dayOfWeek}</h2>
               </div>
               <div>
                 {day.times.map((time, index) => (
-                  <TimeSlot time={time} key={index + time} />
+                  <TimeSlot day={day.date} time={time} key={index + time} />
                 ))}
               </div>
             </div>
