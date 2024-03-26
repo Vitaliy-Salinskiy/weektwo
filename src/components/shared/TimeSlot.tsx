@@ -57,13 +57,14 @@ export const TimeSlot = ({ time, day }: TimeSlotProps) => {
   return (
     <Popover open={isBooking} onOpenChange={handleBooking}>
       <PopoverTrigger
+        // disabled={isBooked}
         className="border-t h-14 w-full"
         onClick={() => {
           setIsBooking(true);
         }}
       >
         {(isBooked || isBooking) && (
-          <div className="bg-black text-white h-full w-full inset-0 rounded-sm shadow-md drop-shadow-lg flex justify-center items-center">
+          <div className="bg-black text-white h-full w-full rounded-sm shadow-md drop-shadow-lg flex justify-center items-center">
             {event || "booking..."}
           </div>
         )}

@@ -1,31 +1,28 @@
 "use client";
 
+import { signIn, useSession } from "next-auth/react";
+
 import { TimeSlot } from "@/components/shared/TimeSlot";
 import { setupSocket } from "@/store/socketStore";
 import { getDays } from "@/utils";
-// import { Calendar } from "@/components/ui/calendar";
 import { useEffect } from "react";
 
 export default function Home() {
   const calendarData = getDays();
   const hours = calendarData[0].times;
-  // const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const { data: _session, status } = useSession();
 
   useEffect(() => {
     const cleanup = setupSocket();
     return cleanup;
   }, []);
 
+  if (status === "loading")
+    return <div className="text-2xl text-bold">Loading...</div>;
+
   return (
     <main className="flex">
-      {/* <div className="mt-[95px] pl-5 pr-10">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-md border"
-        />
-      </div> */}
       <div className="flex flex-col pt-[95px] justify-between">
         {hours.map((hour, index) => (
           <div
@@ -42,7 +39,9 @@ export default function Home() {
           return (
             <div key={day.date + index} className={`border-x`}>
               <div className="flex flex-col items-center justify-center text-center text-gray-500 py-5">
-                <p className="text-sm">{date}</p>
+                <p className="text-sm" onClick={() => signIn("github")}>
+                  {date}
+                </p>
                 <h2 className="text-2xl">{dayOfWeek}</h2>
               </div>
               <div>
