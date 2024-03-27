@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { Socket, io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 
 interface Store {
   socket: Socket | null;
@@ -13,13 +13,3 @@ export const useSocketStore = create(
     setSocket: (socket) => set({ socket }),
   }))
 );
-
-export const setupSocket = () => {
-  const { setSocket } = useSocketStore.getState();
-  const socket = io("http://localhost:5000");
-  setSocket(socket);
-
-  return () => {
-    socket.disconnect();
-  };
-};
