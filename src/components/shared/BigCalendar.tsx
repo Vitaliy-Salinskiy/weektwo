@@ -4,10 +4,10 @@ import { useSetupSocket } from "@/hooks";
 import { getDays } from "@/utils";
 import { TimeSlot } from "./TimeSlot";
 import { useSession } from "next-auth/react";
-import { Slot } from "@prisma/client";
+import { ExtendedSlot } from "@/interfaces";
 
 interface BigCalendarProps {
-  slots: Slot[];
+  slots: Partial<ExtendedSlot[]>;
 }
 
 const BigCalendar = ({ slots }: BigCalendarProps) => {
@@ -42,17 +42,17 @@ const BigCalendar = ({ slots }: BigCalendarProps) => {
               <div>
                 {day.times.map((time, index) => {
                   const matchingSlot = slots.find(
-                    (slot) => slot.time === time && slot.day === day.date
+                    (slot) => slot?.time === time && slot?.day === day.date
                   );
 
                   return (
                     <TimeSlot
                       day={day.date}
                       time={time}
-                      userId={session?.user.id}
+                      session={session}
                       key={index + time}
                       isBookedBy={!!matchingSlot}
-                      eventTitle={matchingSlot?.title}
+                      slot={matchingSlot}
                     />
                   );
                 })}

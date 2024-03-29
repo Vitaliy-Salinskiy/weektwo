@@ -1,9 +1,11 @@
 import BigCalendar from "@/components/shared/BigCalendar";
-import { Slot } from "@prisma/client";
+import { ExtendedSlot } from "@/interfaces";
 
 export default async function Home() {
-  const slotsResponse = await fetch("http://localhost:3000/api/slots");
-  const slots: Slot[] = await slotsResponse.json();
+  const slotsResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/slots`
+  );
+  const slots: Partial<ExtendedSlot[]> = await slotsResponse.json();
 
   return (
     <main className="flex">

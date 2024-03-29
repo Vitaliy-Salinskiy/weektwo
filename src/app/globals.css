@@ -66,6 +66,10 @@
   }
 }
 
+body{
+  min-width: 868px;
+}
+
 @layer base {
   * {
     @apply border-border;

@@ -45,7 +45,20 @@ export const POST = async (request: Request) => {
 
 export const GET = async () => {
   try {
-    const slots = await prisma.slot.findMany();
+    const slots = await prisma.slot.findMany({
+      select: {
+        time: true,
+        day: true,
+        title: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
 
     return new Response(JSON.stringify(slots), { status: 200 });
   } catch (error) {
