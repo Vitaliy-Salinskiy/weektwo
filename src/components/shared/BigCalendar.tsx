@@ -1,18 +1,19 @@
 "use client";
 
+import { Session } from "next-auth";
+
+import { TimeSlot } from "./TimeSlot";
+import { ExtendedSlot } from "@/interfaces";
+
 import { useSetupSocket } from "@/hooks";
 import { getDays } from "@/utils";
-import { TimeSlot } from "./TimeSlot";
-import { useSession } from "next-auth/react";
-import { ExtendedSlot } from "@/interfaces";
 
 interface BigCalendarProps {
   slots: Partial<ExtendedSlot[]>;
+  session: Session | null;
 }
 
-const BigCalendar = ({ slots }: BigCalendarProps) => {
-  const { data: session } = useSession();
-
+const BigCalendar = ({ slots, session }: BigCalendarProps) => {
   const calendarData = getDays();
   const hours = calendarData[0].times;
 

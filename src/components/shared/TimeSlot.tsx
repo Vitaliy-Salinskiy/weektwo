@@ -158,6 +158,7 @@ export const TimeSlot = ({
     <div className="border-t h-14 w-full">
       <Popover open={isBooking} onOpenChange={handleBooking}>
         <PopoverTrigger
+          aria-label="Book a time slot"
           className="w-full h-14"
           disabled={isBooked}
           onClick={() => {
@@ -166,7 +167,7 @@ export const TimeSlot = ({
         >
           {(isBooked || isBooking) && (
             <HoverCard openDelay={50}>
-              <HoverCardTrigger>
+              <HoverCardTrigger asChild>
                 <div className="bg-black text-white h-14 w-full rounded-sm shadow-md drop-shadow-lg grid place-content-center px-2 overflow-hidden">
                   {title || "booking..."}
                 </div>
