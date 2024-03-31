@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   const session = await getServerSession(options);
 
-  const slotsResponse = await fetch(`${process.env.VERCEL_URL}/api/slots`);
+  const slotsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/slots`);
   const slots: Partial<ExtendedSlot[]> = await slotsResponse.json();
 
   return (
